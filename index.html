@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+    <head>
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+        <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+    </head>
+
+    <body style="margin: 0; overflow: hidden;">
+        
+        <div style='position: fixed; top: 10px; width:100%; text-align: center; z-index: 1;'>
+    <button id="rDrill" onclick="Input.rotateDrill()"\>
+            Rotate Drill
+            </button>
+    <button id="Freewheel" onclick="Input.fW()"\>
+        Clutch Slipping        
+    </button>
+    <input type=range id="opacity" min=0 max=1 step=0.01 value=1 />
+            <img src="./img/download.png" height="18px">
+    
+</div>
+        <div style='position: fixed; top: 35px; width:100%; text-align: center; z-index: 1;'>
+            <input type=range id="speed" min=0 max=3 step=0.01 value=1 /><span id="sText" style="color:red">1.00X</span>
+        </div>
+        
+        <a-scene
+            vr-mode-ui="enabled: false;"
+            loading-screen="enabled: false;"
+            renderer="logarithmicDepthBuffer: true;"
+            arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+            id="scene"
+            embedded
+            gesture-detector
+        >
+            <a-assets>
+                <a-asset-item
+                    id="animated-asset"
+                    src="assets/asset.glb"
+                ></a-asset-item>
+            </a-assets>
+
+            <a-marker
+                id="animated-marker"
+                type="pattern"
+                preset="custom"
+                url="assets/marker.patt"
+                raycaster="objects: .clickable"
+                emitevents="true"
+                cursor="fuse: false; rayOrigin: mouse;"
+                id="markerA"
+            > 
+                <a-entity
+                    id="bowser-model"
+                    scale="0.005858306805703953 0.005858306805703953 0.005858306805703953"
+                    gltf-model="#animated-asset"
+                    class="clickable"
+                    gesture-handler
+                    visible=true
+                          
+                ></a-entity>
+            </a-marker>
+
+            <a-entity camera></a-entity>
+        </a-scene>
+        <script type="text/javascript">
+            var b = document.getElementById('test');
+            o = document.getElementById("opacity").value;
+            inputS = 3;
+            iS = 0.35;
+            n =0;
+            rotate=0;
+            choice=0;
+            gltf = document.querySelector('#bowser-model');
+            spText = function(){return iS.toFixed(2)+"X"}
+            
+//            /mesh = gltf.getObject3D('mesh');
+            function Input(){
+                n =0;
+            function clutch(){
+                if(document.getElementById("rDrill")){
+                document.getElementById("rDrill").disabled = true;}
+                if(n<1500 && choice == 1){
+                    n+=0.5;
+                    rotate+=inputS*10/18
+                    mesh = gltf.getObject3D('mesh');
+                    if (rotate<5 ){
+                        mesh.children[20].translateY(0.8);
+                    }else if(rotate>20&&rotate<=25){
+                        mesh.children[20].translateY(-0.8);
+                    }else if (rotate >25){
+                        rotate = 0;
+                    }
+                    
+                    mesh.children[44].rotateY(inputS);
+                    mesh.children[2].children[3].rotateY(inputS);
+                    mesh.children[48].rotateY(-inputS*10/47);
+                    mesh.children[48].rotateY(-inputS*10/47);
+                    for(i = 10;i<13;i++){
+                        mesh.children[4].children[i].rotateY(-inputS*10/18);
+                    }
+                    for(i=4;i<7;i++){
+                        mesh.children[2].children[i].rotateY(-inputS*10/18);
+                    }               
+                }else{
+                    rotate = 0;
+                    choice = 0;
+                    if(document.getElementById("rDrill")){
+                    document.getElementById("rDrill").disabled = false;}
+                }               
+            }
+            function rotateDrill1(){
+                if(n<3000 && choice == 0){
+                    n+=0.5;
+                    mesh = gltf.getObject3D('mesh');
+                    mesh.children[44].rotateY(iS);
+                    mesh.children[2].rotateY(iS*0.1754);
+                    for (i=4;i<7;i++){
+                        mesh.children[2].children[i].rotateY(-(iS-iS*0.1754)*10/18);
+                    }
+                    mesh.children[4].rotateY(iS*0.1754*0.1754);
+                    for(i=10;i<13;i++){
+                        mesh.children[4].children[i].rotateY(-(iS*0.1754-iS*0.1754*0.1754)*10/18);
+                    }
+                }else if(n>=3000 && choice == 0){
+                    n=0;
+                }
+            }
+            function rotateDrill(){
+                choice = 0;
+                n = 0;
+                var elem = document.getElementById('rDrill');
+                elem.parentNode.removeChild(elem);
+                setInterval(rotateDrill1,25);
+            }
+            function fW(){
+                    mesh = gltf.getObject3D('mesh');
+                    console.log(mesh);
+                    Input();
+                    choice = 1;
+                    setInterval(clutch,1);
+                }
+            
+            Input.fW = fW;
+                Input.rotateDrill = rotateDrill;
+            }
+            
+            function opac(){
+                o = document.getElementById("opacity").value;
+                mesh = gltf.getObject3D('mesh');
+                if(o<0.95){
+                    mesh.children[45].visible = false;
+                    mesh.children[46].visible = false;
+                }else{
+                    mesh.children[45].visible = true;
+                    mesh.children[46].visible = true;
+                }
+                
+                mesh.children[48].material.opacity = o/0.5;                
+                mesh.children[50].material.opacity = o/0.8;
+            }
+            function sChange(){
+                iS = parseFloat(document.getElementById("speed").value)
+                document.getElementById("sText").innerHTML = spText()
+            }
+            Input();
+//            mesh.children[1].rotateX(rot());
+            document.getElementById("opacity").addEventListener("input",opac);
+            document.getElementById("Freewheel").addEventListener("input",Input);
+            document.getElementById("speed").addEventListener("input",sChange);
+            
+        </script>
+    </body>
+</html>
