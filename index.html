@@ -9,7 +9,7 @@
     </head>
 
     <body style="margin: 0; overflow: hidden;">
-        
+        <div class="content">
         <div align="center" style='position: fixed; top: 10px; width:100%; text-align: center; z-index: 1;'>
     <button id="rDrill" onclick="Input.rotateDrill()"\>
             Start Drill
@@ -24,7 +24,7 @@
         <div align="center" style='position: fixed; top: 35px; width:100%; text-align: center; z-index: 1;'>
             <input type=range id="speed" min=0 max=3 step=0.01 value=1 /><span id="sText" style="color:red">1.00X</span>
         </div>
-        
+        </div>
         <a-scene
             vr-mode-ui="enabled: false;"
             loading-screen="enabled: false;"
@@ -172,4 +172,14 @@
             
         </script>
     </body>
+    <style type="text/css">
+        .content
+{
+ text-align: center;
+}
+.inner
+{
+ display:inline-block;
+}
+    </style>
 </html>
