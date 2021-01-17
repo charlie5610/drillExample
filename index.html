@@ -108,6 +108,7 @@
                 }               
             }
             function rotateDrill1(){
+                document.getElementById('Freewheel').disabled = false;
                 if(n<3000 && choice == 0){
                     n+=0.5;
                     mesh = gltf.getObject3D('mesh');
@@ -126,8 +127,7 @@
             }
             function rotateDrill(){
                 choice = 0;
-                n = 0;
-                document.getElementById('Freewheel').disabled = false;
+                n = 0;                
                 setInterval(rotateDrill1,25);
             }
             function fW(){
