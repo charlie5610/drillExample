@@ -76,8 +76,6 @@
             function Input(){
                 n =0;
             function clutch(){
-                if(document.getElementById("rDrill")){
-                document.getElementById("rDrill").disabled = true;}
                 if(n<1500 && choice == 1){
                     n+=0.5;
                     rotate+=inputS*10/18
@@ -103,12 +101,10 @@
                 }else{
                     rotate = 0;
                     choice = 0;
-                    if(document.getElementById("rDrill")){
-                    document.getElementById("rDrill").disabled = false;}
+                    document.getElementById('Freewheel').disabled = false;
                 }               
             }
             function rotateDrill1(){
-                document.getElementById('Freewheel').disabled = false;
                 if(n<3000 && choice == 0){
                     n+=0.5;
                     mesh = gltf.getObject3D('mesh');
@@ -139,7 +135,7 @@
                 }
             
             Input.fW = fW;
-                Input.rotateDrill = rotateDrill;
+            Input.rotateDrill = rotateDrill;
             }
             
             function opac(){
@@ -168,8 +164,7 @@
             gltf.addEventListener('loaded', function (e) {
                 mesh = gltf.getObject3D('mesh');
                 console.log(mesh)    
-                Input.rotateDrill()
-                    
+                Input.rotateDrill()                    
             });
         </script>
     </body>
