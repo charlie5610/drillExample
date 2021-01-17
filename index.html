@@ -11,9 +11,6 @@
     <body style="margin: 0; overflow: hidden;">
         <div class="content">
         <div align="center" style='position: fixed; top: 10px; width:100%; text-align: right; z-index: 1;'>
-    <button id="rDrill" onclick="Input.rotateDrill()"\>
-            Start Drill
-            </button>
     <button id="Freewheel" onclick="Input.fW()"\>
         Clutch Slipping        
     </button>
@@ -130,8 +127,6 @@
             function rotateDrill(){
                 choice = 0;
                 n = 0;
-                var elem = document.getElementById('rDrill');
-                elem.parentNode.removeChild(elem);
                 setInterval(rotateDrill1,25);
             }
             function fW(){
@@ -169,7 +164,12 @@
             document.getElementById("opacity").addEventListener("input",opac);
             document.getElementById("Freewheel").addEventListener("input",Input);
             document.getElementById("speed").addEventListener("input",sChange);
-            
+            gltf.addEventListener('loaded', function (e) {
+                mesh = gltf.getObject3D('mesh');
+                console.log(mesh)    
+                Input.rotateDrill()
+                    
+            });
         </script>
     </body>
     <style type="text/css">
