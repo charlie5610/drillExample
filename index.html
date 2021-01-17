@@ -127,11 +127,12 @@
             function rotateDrill(){
                 choice = 0;
                 n = 0;
+                document.getElementById('Freewheel').disabled = false;
                 setInterval(rotateDrill1,25);
             }
             function fW(){
                     mesh = gltf.getObject3D('mesh');
-                    console.log(mesh);
+                    document.getElementById('Freewheel').disabled = true;
                     Input();
                     choice = 1;
                     setInterval(clutch,1);
