@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
     <head>
+        <link rel="stylesheet" href="styles.css">
         <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
         <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
         <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
@@ -9,18 +10,32 @@
     </head>
 
     <body style="margin: 0; overflow: hidden;">
-        <div class="content">
-        <div align="center" style='position: fixed; top: 10px; width:100%; text-align: right; z-index: 1;'>
-    <button id="Freewheel" onclick="Input.fW()"\>
-        Clutch Slipping        
-    </button>
-    <input type=range id="opacity" min=0 max=1 step=0.01 value=1 />
-            <img src="./img/download.png" height="18px">
-    
+<!--        <div class="content">-->
+<!--        <div align="center" style='position: fixed; top: 10px; width:100%; text-align: right; z-index: 1;'>-->
+
+<!--    <input type=range id="opacity" min=0 max=1 step=0.01 value=1 />-->
+<!--            <img src="./img/download.png" height="18px">-->
+
+<!--</div>-->
+<!--        <div align="center" style='position: fixed; top: 35px; width:100%; text-align: right; z-index: 1;'>-->
+<!--            <input type=range id="speed" min=0 max=3 step=0.01 value=1 /><span id="sText" style="color:red">1.00X</span>-->
+<!--        </div>-->
+<!--        </div>-->
+        <div class="buttons">
+          <div class="dropup">
+  <button class="dropbtn">Dropup</button>
+  <div class="dropup-content">
+    <div class="slidecontainer">
+  <input type="range" min="0" max="1" value="1" step="0.01" class="slider" id="opacity"> Opacity
 </div>
-        <div align="center" style='position: fixed; top: 35px; width:100%; text-align: right; z-index: 1;'>
-            <input type=range id="speed" min=0 max=3 step=0.01 value=1 /><span id="sText" style="color:red">1.00X</span>
-        </div>
+<div class="slidecontainer">
+  <input type="range" min="0" max="3" value="1" step="0.01" class="slider" id="speed"> Speed: <span id="sText" style="color:red">1.00X</span>
+</div>
+    <button class="button" id="Freewheel" onclick="Input.fW()"\>
+        Clutch Slipping
+    </button>
+  </div>
+</div>
         </div>
         <a-scene
             vr-mode-ui="enabled: false;"
@@ -47,7 +62,7 @@
                 emitevents="true"
                 cursor="fuse: false; rayOrigin: mouse;"
                 id="markerA"
-            > 
+            >
                 <a-entity
                     id="bowser-model"
                     scale="0.005858306805703953 0.005858306805703953 0.005858306805703953"
@@ -55,7 +70,7 @@
                     class="clickable"
                     gesture-handler
                     visible=true
-                          
+
                 ></a-entity>
             </a-marker>
 
@@ -71,7 +86,7 @@
             choice=0;
             gltf = document.querySelector('#bowser-model');
             spText = function(){return iS.toFixed(2)+"X"}
-            
+
 //            /mesh = gltf.getObject3D('mesh');
             function Input(){
                 n =0;
@@ -87,7 +102,7 @@
                     }else if (rotate >25){
                         rotate = 0;
                     }
-                    
+
                     mesh.children[44].rotateY(inputS);
                     mesh.children[2].children[3].rotateY(inputS);
                     mesh.children[48].rotateY(-inputS*10/47);
@@ -97,12 +112,12 @@
                     }
                     for(i=4;i<7;i++){
                         mesh.children[2].children[i].rotateY(-inputS*10/18);
-                    }               
+                    }
                 }else{
                     rotate = 0;
                     choice = 0;
                     document.getElementById('Freewheel').disabled = false;
-                }               
+                }
             }
             function rotateDrill1(){
                 if(n<3000 && choice == 0){
@@ -123,7 +138,7 @@
             }
             function rotateDrill(){
                 choice = 0;
-                n = 0;                
+                n = 0;
                 setInterval(rotateDrill1,25);
             }
             function fW(){
@@ -133,11 +148,11 @@
                     choice = 1;
                     setInterval(clutch,1);
                 }
-            
+
             Input.fW = fW;
             Input.rotateDrill = rotateDrill;
             }
-            
+
             function opac(){
                 o = document.getElementById("opacity").value;
                 mesh = gltf.getObject3D('mesh');
@@ -148,8 +163,8 @@
                     mesh.children[45].visible = true;
                     mesh.children[46].visible = true;
                 }
-                
-                mesh.children[48].material.opacity = o/0.5;                
+
+                mesh.children[48].material.opacity = o/0.5;
                 mesh.children[50].material.opacity = o/0.8;
             }
             function sChange(){
@@ -163,19 +178,12 @@
             document.getElementById("speed").addEventListener("input",sChange);
             gltf.addEventListener('loaded', function (e) {
                 mesh = gltf.getObject3D('mesh');
-                console.log(mesh)    
-                Input.rotateDrill()                    
+                console.log(mesh)
+                Input.rotateDrill()
             });
         </script>
     </body>
     <style type="text/css">
-        .content
-{
- text-align: center;
-}
-.inner
-{
- display:inline-block;
-}
+
     </style>
 </html>
